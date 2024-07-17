@@ -36,6 +36,15 @@ app.get("/messages/:id", async (req, res) => {
     }
 });
 
+app.post("/messages", async (req, res) => {
+    const newMessage = req.body;
+    const dbResult = await query(
+        "INSERT INTO chat_messages (text, author) VALUES ($1, $2) returning *",
+        [newMessage.text, newMessage.author]
+    );
+    res.json(dbResult.rows);
+});
+
 // use the environment variable PORT, or 4000 as a fallback
 const PORT = process.env.PORT ?? 4000;
 
