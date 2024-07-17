@@ -13,17 +13,23 @@ const client = new pg.Client({
 
 client.connect();
 
-app.get("/", (req, res) => {
-    res.json({
-        outcome: "success",
-        message: "hello world!  Try /sum/1/2 or /db-check",
-    });
-});
-
 //An example route that makes an SQL query to the db.
-app.get("/db-check", async (req, res) => {
+app.get("/messages", async (req, res) => {
     try {
         const dbResult = await query("select * from chat_messages");
+        res.json(dbResult.rows);
+    } catch (error) {
+        console.error("error handling db-check: ", error);
+    }
+});
+
+app.get("/messages/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const dbResult = await query(
+            "select * from chat_messages where id = $1",
+            [id]
+        );
         res.json(dbResult.rows);
     } catch (error) {
         console.error("error handling db-check: ", error);
