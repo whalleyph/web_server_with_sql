@@ -20,6 +20,7 @@ app.get("/messages", async (req, res) => {
         res.json(dbResult.rows);
     } catch (error) {
         console.error("error handling db-check: ", error);
+        res.status(500).json({ error: error });
     }
 });
 
@@ -33,6 +34,7 @@ app.get("/messages/:id", async (req, res) => {
         res.json(dbResult.rows);
     } catch (error) {
         console.error("error handling db-check: ", error);
+        res.status(500).json({ error: error });
     }
 });
 
